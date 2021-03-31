@@ -1,0 +1,28 @@
+--cpu=Cortex-M4.fp.sp
+"spi3_master\startup_stm32f407xx.o"
+"spi3_master\my_nrf24.o"
+"spi3_master\main.o"
+"spi3_master\stm32f4xx_it.o"
+"spi3_master\stm32f4xx_hal_msp.o"
+"spi3_master\stm32f4xx_hal_spi.o"
+"spi3_master\stm32f4xx_hal_rcc.o"
+"spi3_master\stm32f4xx_hal_rcc_ex.o"
+"spi3_master\stm32f4xx_hal_flash.o"
+"spi3_master\stm32f4xx_hal_flash_ex.o"
+"spi3_master\stm32f4xx_hal_flash_ramfunc.o"
+"spi3_master\stm32f4xx_hal_gpio.o"
+"spi3_master\stm32f4xx_hal_dma_ex.o"
+"spi3_master\stm32f4xx_hal_dma.o"
+"spi3_master\stm32f4xx_hal_pwr.o"
+"spi3_master\stm32f4xx_hal_pwr_ex.o"
+"spi3_master\stm32f4xx_hal_cortex.o"
+"spi3_master\stm32f4xx_hal.o"
+"spi3_master\stm32f4xx_hal_exti.o"
+"spi3_master\stm32f4xx_hal_tim.o"
+"spi3_master\stm32f4xx_hal_tim_ex.o"
+"spi3_master\stm32f4xx_hal_uart.o"
+"spi3_master\system_stm32f4xx.o"
+--library_type=microlib --strict --scatter "SPI3_Master\SPI3_Master.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "SPI3_Master.map" -o SPI3_Master\SPI3_Master.axf

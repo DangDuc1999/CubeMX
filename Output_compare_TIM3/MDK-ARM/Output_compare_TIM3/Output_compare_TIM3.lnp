@@ -1,0 +1,25 @@
+--cpu=Cortex-M4.fp.sp
+"output_compare_tim3\startup_stm32f407xx.o"
+"output_compare_tim3\main.o"
+"output_compare_tim3\stm32f4xx_it.o"
+"output_compare_tim3\stm32f4xx_hal_msp.o"
+"output_compare_tim3\stm32f4xx_hal_tim.o"
+"output_compare_tim3\stm32f4xx_hal_tim_ex.o"
+"output_compare_tim3\stm32f4xx_hal_rcc.o"
+"output_compare_tim3\stm32f4xx_hal_rcc_ex.o"
+"output_compare_tim3\stm32f4xx_hal_flash.o"
+"output_compare_tim3\stm32f4xx_hal_flash_ex.o"
+"output_compare_tim3\stm32f4xx_hal_flash_ramfunc.o"
+"output_compare_tim3\stm32f4xx_hal_gpio.o"
+"output_compare_tim3\stm32f4xx_hal_dma_ex.o"
+"output_compare_tim3\stm32f4xx_hal_dma.o"
+"output_compare_tim3\stm32f4xx_hal_pwr.o"
+"output_compare_tim3\stm32f4xx_hal_pwr_ex.o"
+"output_compare_tim3\stm32f4xx_hal_cortex.o"
+"output_compare_tim3\stm32f4xx_hal.o"
+"output_compare_tim3\stm32f4xx_hal_exti.o"
+"output_compare_tim3\system_stm32f4xx.o"
+--library_type=microlib --strict --scatter "Output_compare_TIM3\Output_compare_TIM3.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "Output_compare_TIM3.map" -o Output_compare_TIM3\Output_compare_TIM3.axf
