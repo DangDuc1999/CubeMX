@@ -127,10 +127,10 @@ NRF24_startListening();
 		{
 			NRF24_read(MyRxData, 32);
 			//NRF24_writeAckPayload(1, MyAckPayload, 32);
-			MyRxData[32] = '\r';
-			MyRxData[33] = '\n';
+			MyRxData[33] = '\r';
+			MyRxData[34] = '\n';
 //			HAL_Delay(100);
-			HAL_UART_Transmit(&huart1, (uint8_t*) MyRxData, 34, 10);
+			HAL_UART_Transmit(&huart1, (uint8_t*) MyRxData, 35, 10);
 		}
 		
 		HAL_Delay(2000);

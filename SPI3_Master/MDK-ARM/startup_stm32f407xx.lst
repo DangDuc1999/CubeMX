@@ -832,14 +832,14 @@ ARM Macro Assembler    Page 13
   423 0000001C                 END
               00000000 
               00000000 
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
-interwork --depend=spi3_master\startup_stm32f407xx.d -ospi3_master\startup_stm3
-2f407xx.o -I.\RTE\_SPI3_Master -IC:\Users\ducda\AppData\Local\Arm\Packs\ARM\CMS
-IS\5.7.0\CMSIS\Core\Include -IC:\Users\ducda\AppData\Local\Arm\Packs\Keil\STM32
-F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__EVAL S
-ETA 1" --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 534"
- --predefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --predefine="_RTE_
- SETA 1" --list=startup_stm32f407xx.lst startup_stm32f407xx.s
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --depen
+d=spi3_master\startup_stm32f407xx.d -ospi3_master\startup_stm32f407xx.o -I.\RTE
+\_SPI3_Master -IC:\Users\ducda\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Co
+re\Include -IC:\Users\ducda\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\D
+rivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__EVAL SETA 1" --predefin
+e="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 534" --predefine="_RT
+E_ SETA 1" --predefine="STM32F407xx SETA 1" --predefine="_RTE_ SETA 1" --list=s
+tartup_stm32f407xx.lst startup_stm32f407xx.s
 
 
 
