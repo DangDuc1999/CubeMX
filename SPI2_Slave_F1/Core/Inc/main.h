@@ -58,16 +58,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define IRQ_Pin GPIO_PIN_10
-#define IRQ_GPIO_Port GPIOB
 #define CSN_Pin GPIO_PIN_6
 #define CSN_GPIO_Port GPIOB
 #define CE_Pin GPIO_PIN_7
 #define CE_GPIO_Port GPIOB
-//#define CSNB6_Pin GPIO_PIN_6
-//#define CSNB6_GPIO_Port GPIOB
-//#define CEB7_Pin GPIO_PIN_7
-//#define CEB7_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

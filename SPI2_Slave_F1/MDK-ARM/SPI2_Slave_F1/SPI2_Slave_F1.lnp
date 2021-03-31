@@ -1,9 +1,9 @@
 --cpu Cortex-M3
 "spi2_slave_f1\startup_stm32f103xb.o"
+"spi2_slave_f1\nrf24.o"
 "spi2_slave_f1\main.o"
 "spi2_slave_f1\stm32f1xx_it.o"
 "spi2_slave_f1\stm32f1xx_hal_msp.o"
-"spi2_slave_f1\nrf24.o"
 "spi2_slave_f1\stm32f1xx_hal_gpio_ex.o"
 "spi2_slave_f1\stm32f1xx_hal_spi.o"
 "spi2_slave_f1\stm32f1xx_hal.o"
