@@ -40,6 +40,7 @@ uint8_t ch;
 uint64_t RxpipeAddres = 0x11223344AA;
 char MyRxData[40];
 char MyAckPayload[32] = "Dang Duc";
+bool led = false;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -100,23 +101,24 @@ int main(void)
 //HAL_UART_Transmit(&huart1,(uint8_t *)"SPI1 F103 Slave\r\n",15,1000);
 
 //HAL_UART_Receive_IT(&huart2,&ch ,1 );
-
 NRF24_begin(GPIOB, CSN_Pin, CE_Pin, hspi1);
 nrf24_DebugUART_Init(huart1);
-
 printRadioSettings();
-
 /* Receiver - No ACK */
 //NRF24_stopListening();
 //NRF24_setDataRate(RF24_2MBPS);
 NRF24_setAutoAck(false);
 NRF24_setChannel(52);
-NRF24_setPayloadSize(32);
+NRF24_setPayloadSize(32); // VL
 NRF24_openReadingPipe(1, RxpipeAddres);
 //NRF24_enableDynamicPayloads();
 //NRF24_enableAckPayload();
 
 NRF24_startListening();
+
+//HAL_SPI_Receive_IT(&hspi1,(uint8_t*) MyRxData, 32);
+//HAL_SPI_IRQHandler(&hspi1);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -125,15 +127,26 @@ NRF24_startListening();
   {
 		if(NRF24_available())
 		{
-			NRF24_read(MyRxData, 32);
+			NRF24_read(MyRxData, 4);
 			//NRF24_writeAckPayload(1, MyAckPayload, 32);
-			MyRxData[33] = '\r';
-			MyRxData[34] = '\n';
+//			MyRxData[13] = '\r';
+//			MyRxData[14] = '\n';
 //			HAL_Delay(100);
-			HAL_UART_Transmit(&huart1, (uint8_t*) MyRxData, 35, 10);
+			HAL_UART_Transmit(&huart1, (uint8_t*) MyRxData, 5, 10);
+	if(MyRxData[0] == '1')
+	{
+		led = true;
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
+	}
+	if(MyRxData[0] == '0')
+	{
+		led = false;
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+	}
 		}
-		
-		HAL_Delay(2000);
+		HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -260,15 +273,26 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, CSN_Pin|CE_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 
-  /*Configure GPIO pins : CSN_Pin CE_Pin */
-  GPIO_InitStruct.Pin = CSN_Pin|CE_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12|CSN_Pin|CE_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin : PC13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB12 CSN_Pin CE_Pin */
+  GPIO_InitStruct.Pin = GPIO_PIN_12|CSN_Pin|CE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;

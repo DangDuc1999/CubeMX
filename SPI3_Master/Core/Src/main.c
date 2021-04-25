@@ -64,6 +64,7 @@ static void MX_SPI2_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint8_t ch;
+volatile uint8_t status = 0;
 uint64_t TxpipeAddres = 0x11223344AA;
 char DataSent[32] = "Hello nFR";
 char MyAckPayload[32];
@@ -103,10 +104,8 @@ int main(void)
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 	HAL_SPI_Init(&hspi3);
-HAL_UART_Transmit(&huart2,(uint8_t *)"SPI3 \r\n",13,1000);
+//HAL_UART_Transmit(&huart2,(uint8_t *)"SPI3 \r\n",13,1000);
 
-//HAL_UART_Receive_IT(&huart2,&ch ,1 );
-//UART_Start_Receive_IT(&huart2, &ch, 1);
 
 NRF24_begin(GPIOB, CSN_Pin, CE_Pin, hspi3);
 nrf24_DebugUART_Init(huart2);
@@ -116,10 +115,10 @@ printRadioSettings();
 /* Transmit - No ACK */
 NRF24_stopListening();
 NRF24_setDataRate(RF24_2MBPS);
-NRF24_setAutoAck(false);
+NRF24_setAutoAck(true);
 NRF24_setChannel(52);
 NRF24_openWritingPipe(TxpipeAddres);
-NRF24_setPayloadSize(7);
+NRF24_setPayloadSize(32);
 
 //NRF24_enableDynamicPayloads();
 //NRF24_enableAckPayload();
@@ -129,16 +128,32 @@ NRF24_setPayloadSize(7);
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		//NRF24_write(DataSent, 32);
-		if(NRF24_write(DataSent, 32))
+//		//NRF24_write(DataSent, 32);
+//		if(NRF24_write(DataSent, 32))
+//		{
+//			//NRF24_read(MyAckPayload, 32);
+//			HAL_UART_Transmit(&huart2, (uint8_t*) "Transmited data\r\n", strlen("Transmited data\r\n"),10);
+//			
+//			//HAL_UART_Transmit(&huart2, (uint8_t*) MyAckPayload, strlen(MyAckPayload), 10);
+//		}
+//		switch(status)
+//		{
+//			case 0:
+//				NRF24_write("0 Hello \r\n", 32);
+//				break;
+//			case 1:
+//				NRF24_write("1 Hello \r\n", 32);
+//				break;
+//		}
+		if(status == 1)
 		{
-			//NRF24_read(MyAckPayload, 32);
-			HAL_UART_Transmit(&huart2, (uint8_t*) "Transmited data\r\n", strlen("Transmited data\r\n"),10);
-			
-			//HAL_UART_Transmit(&huart2, (uint8_t*) MyAckPayload, strlen(MyAckPayload), 10);
+			NRF24_write("1 \r\n", 32);
 		}
-		
-		HAL_Delay(500);
+		else if(status == 0)
+		{
+			NRF24_write("0 \r\n", 32);
+		}
+		HAL_Delay(100);
 		
     /* USER CODE END WHILE */
 
@@ -146,7 +161,17 @@ NRF24_setPayloadSize(7);
   }
   /* USER CODE END 3 */
 }
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == GPIO_PIN_3)
+	{
+		status = 1;
+	}
+	if(GPIO_Pin == GPIO_PIN_4)
+	{
+		status = 0;
+	}
+}
 /**
   * @brief System Clock Configuration
   * @retval None
@@ -348,6 +373,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -359,12 +385,25 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(IRQ_GPIO_Port, IRQ_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pins : PE3 PE4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
   /*Configure GPIO pins : CE_Pin CSN_Pin IRQ_Pin */
   GPIO_InitStruct.Pin = CE_Pin|CSN_Pin|IRQ_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI4_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_IRQn);
 
 }
 

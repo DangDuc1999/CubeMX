@@ -1,0 +1,1 @@
+rtos_spi3_slave_nrf24_f407\startup_stm32f407xx.o: startup_stm32f407xx.s
